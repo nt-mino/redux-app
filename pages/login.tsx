@@ -1,12 +1,32 @@
 import { NextPage } from "next";
+import { useRouter } from "next/router";
+
+/**
+ * @description 認証データ
+ * email: minoru@gmail.com
+ * pass: password
+ */
 
 const Page: NextPage = () => {
-  /**
-   * @description 認証データ
-   * email: minoru@gmail.com
-   * pass: password
-   */
-  return <div>Page</div>;
+  const router = useRouter();
+
+  const routeToLink = () => {
+    router.push("/");
+  };
+
+  return (
+    <div className="p-4">
+      {/* TODO: ログインページのデザイン */}
+      <h1 className="text-[21px]">ログインページ</h1>
+      <button
+        type="button"
+        className="bg-blue-400 text-white p-2 rounded-lg"
+        onClick={routeToLink}
+      >
+        トップに戻る
+      </button>
+    </div>
+  );
 };
 
 export default Page;

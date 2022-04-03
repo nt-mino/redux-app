@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export type AuthState = {
   credential: {
@@ -24,11 +24,25 @@ const initialState: AuthState = {
 export const authSlice = createSlice({
   name: "auth",
   initialState,
-  reducers: {},
+  reducers: {
+    // * メールアドレス変更
+    changeEmail: (state, action) => {
+      const copyInitialState = {
+        credential: {
+          uid: "",
+          email: action.payload,
+          emailVerified: false,
+          photoURL: "",
+          displayName: "",
+        },
+      };
+      state.credential = copyInitialState.credential;
+    },
+  },
 });
 
 // * Action Creatorsをエクスポートする
-// export const {} = authSlice.actions;
+export const { changeEmail } = authSlice.actions;
 
 export const selectCredential = (state: AuthState) => state.credential;
 
