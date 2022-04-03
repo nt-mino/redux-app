@@ -1,5 +1,10 @@
 import type { FirebaseApp } from "firebase/app";
+import type { Auth as FirebaseAuth } from "firebase/auth";
+import type { Firestore as FirebaseFirestore } from "firebase/firestore";
+
 import { getApps, initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
 
 /**
  * @description Firebaseの管理画面から取得したAPIオブジェクト
@@ -22,3 +27,6 @@ export const getFirebaseApp = (): FirebaseApp | undefined => {
   //   if (typeof window === "undefined") return; // バックエンドで実行されないようにする
   return getApps()[0] || initializeApp(firebaseConfig);
 };
+
+export const auth: FirebaseAuth = getAuth(getFirebaseApp());
+export const db: FirebaseFirestore = getFirestore(getFirebaseApp());

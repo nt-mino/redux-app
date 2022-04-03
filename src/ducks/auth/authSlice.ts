@@ -27,16 +27,16 @@ export const authSlice = createSlice({
   reducers: {
     // * メールアドレス変更
     changeEmail: (state, action) => {
-      const copyInitialState = {
-        credential: {
-          uid: "",
-          email: action.payload,
-          emailVerified: false,
-          photoURL: "",
-          displayName: "",
-        },
-      };
-      state.credential = copyInitialState.credential;
+      // const copyInitialState = {
+      //   credential: {
+      //     uid: "",
+      //     email: action.payload,
+      //     emailVerified: false,
+      //     photoURL: "",
+      //     displayName: "",
+      //   },
+      // };
+      // state.credential = copyInitialState.credential;
     },
   },
 });
