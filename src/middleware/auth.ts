@@ -1,5 +1,5 @@
 import { GetServerSidePropsContext } from "next";
-import { auth } from "@/plugins/firebaseAdmin";
+import { auth, db } from "@/plugins/firebaseAdmin";
 
 type Credential = {
   uid: string;

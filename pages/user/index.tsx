@@ -8,9 +8,16 @@ import {
   changeEmail,
 } from "@/ducks/auth/authSlice";
 import { verifyUser } from "@/middleware/auth";
-import { asyncUserInfo } from "@/ducks/user/asyncActions";
+import { asyncUserInfo, UserInfoData } from "@/ducks/user/asyncActions";
+import clone from "just-clone";
+import { fetcher } from "@/utils/swr";
+import useSWRImmutable from "swr/immutable";
 
 export const getServerSideProps: GetServerSideProps = verifyUser();
+
+export type ApiResponse = {
+  userInfoData: UserInfoData;
+};
 
 const Page: NextPage<AuthState> = ({ credential }) => {
   const router = useRouter();
@@ -19,20 +26,26 @@ const Page: NextPage<AuthState> = ({ credential }) => {
     router.push("/test");
   };
 
+  const { data } = useSWRImmutable<ApiResponse>(
+    `/api/user/${credential.uid}/userInfo`,
+    fetcher
+  );
+  const userInfoData = data?.userInfoData;
+
   // *** redux関連の処理 ***
-  const selector = useAppSelector((state) => state.auth.credential);
-  console.log(selector);
+  const selector = useAppSelector((state) => state.userInfo);
   const dispatch = useAppDispatch();
-  const changeFun = () => {
-    dispatch(changeEmail("test123@gmail.com"));
-  };
-  const state = store.getState().auth.credential;
-  const checkFun = () => {
-    console.log(state);
-  };
 
   const checkAsyncFun = async () => {
-    await dispatch(asyncUserInfo("5jTGMC54UxYo0gPVnIYqeZ42Kq13"));
+    const selectorCopy = clone(userInfoData!);
+    selectorCopy.learnTime = 1000;
+
+    await dispatch(
+      asyncUserInfo({
+        userInfo: selectorCopy,
+        uid: credential.uid,
+      })
+    );
   };
 
   return (
@@ -41,10 +54,6 @@ const Page: NextPage<AuthState> = ({ credential }) => {
         uid: <span className="font-normal">{credential.uid}</span>
       </p>
       <div className="flex gap-x-4">
-        <button type="button" onClick={changeFun}>
-          変更
-        </button>
-        <button onClick={checkFun}>確認</button>
         <button onClick={checkAsyncFun}>非同期確認</button>
         <button onClick={routeToLink}>テストページ</button>
       </div>

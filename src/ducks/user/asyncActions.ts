@@ -1,22 +1,29 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { db } from "@/plugins/firebase";
 import { doc, setDoc } from "firebase/firestore";
-import { UserInfo } from "./userInfoSlice";
+import { ApiResponse } from "pages/user";
 
+export type UserInfoData = {
+  uid: string;
+  email: string;
+  learnTime: number;
+};
+
+/**
+ * @description Firestoreのユーザーデータの更新処理
+ * @param 変更データ, ユーザーID
+ */
 export const asyncUserInfo = createAsyncThunk(
   "userInfo/asyncUserInfo",
-  async (uid: string): Promise<void> => {
+  async (
+    arg: { userInfo: UserInfoData; uid: string },
+    thunkAPI
+  ): Promise<void> => {
     try {
+      const { uid, userInfo } = arg;
+
       const userRef = doc(db, "users", uid);
-      await setDoc(
-        userRef,
-        {
-          uid: "5jTGMC54UxYo0gPVnIYqeZ42Kq13",
-          email: "minoru@gmail.com",
-          learnTime: 10,
-        },
-        { merge: true }
-      );
+      await setDoc(userRef, userInfo, { merge: true });
     } catch (error) {
       console.log(error);
     }

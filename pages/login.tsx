@@ -11,7 +11,7 @@ const Page: NextPage = () => {
   const router = useRouter();
 
   const routeToLink = () => {
-    router.push("/");
+    router.push("/user");
   };
 
   return (
